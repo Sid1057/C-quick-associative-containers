@@ -1,6 +1,9 @@
+#ifndef HPP_BLOOM_FILTER
+#define HPP_BLOOM_FILTER
+
 #include <functional> // hash function
 #include <vector> // vector
-#include <initializer_list> // vector
+#include <initializer_list> // initializer_list
 
 template< class Key,
           size_t bucket_count,
@@ -9,7 +12,7 @@ class Counting_bloom_filter
 {
 public:
   Counting_bloom_filter() = delete;
-  Counting_bloom_filter(std::initializer_list< std::function< size_t(Key)> > functions = {std::hash< Key >{}})
+  Counting_bloom_filter(const std::initializer_list< std::function< size_t(Key)> > functions = {std::hash< Key >{}})
     :
      hash_functions(functions),
      table(bucket_count)
@@ -21,9 +24,9 @@ public:
   }
   ~Counting_bloom_filter() = default;
 
-  bool has(Key& item) const
+  bool has(const Key& item) const
   {
-    for (auto& hash_fn : hash_functions)
+    for (const auto& hash_fn : hash_functions)
     {
       if (table[hash_fn(item) % bucket_count] == 0)
       {
@@ -33,17 +36,17 @@ public:
     return true;
   }
 
-  void insert(Key item)
+  void insert(const Key& item)
   {
-    for (auto& hash_fn : hash_functions)
+    for (const auto& hash_fn : hash_functions)
     {
       ++table[hash_fn(item) % bucket_count];
     }
   }
 
-  void erase(Key item)
+  void erase(const Key& item)
   {
-    for (auto& hash_fn : hash_functions)
+    for (const auto& hash_fn : hash_functions)
     {
       if (table[hash_fn(item) % bucket_count] != 0)
       {
@@ -56,3 +59,5 @@ private:
   std::vector< std::function< size_t(Key) > > hash_functions;
   std::vector< counting_type > table;
 };
+
+#endif
