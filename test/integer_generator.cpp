@@ -8,10 +8,9 @@ int main(int argc, char const *argv[])
   if (argc == 2 && (count = std::atoi(argv[1])) > 0)
   {
     std::random_device rd;
-    int median = (rd.max() - rd.min()) / 2;
     for (int i = 0; i < count; ++i)
     {
-      std::cout << (int)rd() - median<< "\n";
+      std::cout << (long long int)rd() << "\n";
     }
   }
   else

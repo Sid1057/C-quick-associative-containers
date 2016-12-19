@@ -12,6 +12,7 @@ size_t my_simple_hash(int i)
   } while (i > 0);
   return result;
 }
+
 int main(int /*argc*/, const char*/*argv*/[])
 {
   Counting_bloom_filter< int, 113 > my_set({std::hash< int >{}, my_simple_hash});
