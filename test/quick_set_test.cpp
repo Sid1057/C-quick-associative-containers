@@ -30,9 +30,9 @@ public:
     size_t result = 0;
     for (auto& i : vec)
     {
-      result += std::hash< long int >(i);
+      result += std::hash< long int >()(i);
     }
-    return /= vec.size(); 
+    return result / vec.size(); 
   }
 private:
   std::vector< long int > vec;
