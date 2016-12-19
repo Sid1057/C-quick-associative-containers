@@ -8,52 +8,76 @@
 template< class Key,
           size_t bucket_count,
           typename counting_type = unsigned int >
-class Quick_set : private std::set< Key >
+class Quick_set
 {
 private:
-  typedef std::set< Key > base_set;
+  typedef std::set< Key > base_set_type;
+  std::set< Key > base_set;
 public:
-  typedef typename base_set::size_type       size_type;
-  typedef typename base_set::iterator        iterator;
-  typedef typename base_set::const_iterator  const_iterator;
-
-  using base_set::begin;
-  using base_set::cbegin;
-  using base_set::clear;
-  using base_set::end;
-  using base_set::cend;
-  using base_set::size;
-  using base_set::insert;
-  using base_set::erase;
-  using base_set::find;
+  typedef typename base_set_type::size_type       size_type;
+  typedef typename base_set_type::iterator        iterator;
+  typedef typename base_set_type::const_iterator  const_iterator;
 
   Quick_set(const std::initializer_list< std::function< size_t(Key)> > functions = {std::hash< Key >{}})
   :bloom(functions)
   {}
   ~Quick_set() = default;
+
+  iterator begin() const
+  {
+    return base_set.begin();
+  }
+
+  const_iterator cbegin() const
+  {
+    return base_set.cbegin();
+  }
+
+  void clear()
+  {
+    base_set.clear();
+  }
+
+  iterator end() const
+  {
+    return base_set.end();
+  }
+
+  const_iterator cend() const
+  {
+    return base_set.cend();
+  }
+
+  size_t size() const
+  {
+    return base_set.size();
+  }
+  // base_set.insert
+  // base_set.erase
+  // base_set.find
   // insert
   std::pair<iterator,bool> insert (const  Key & val)
   {
     bloom.insert(val);
-    return base_set::insert(val);
+    return base_set.insert(val);
   }
 
   std::pair<iterator,bool> insert ( Key && val)
   {
     bloom.insert(val);
-    return base_set::insert(val);
+    return base_set.insert(val);
   }
 
   iterator insert (const_iterator position, const  Key & val)
   {
     bloom.insert(val);
-    return base_set::insert(position, val);
+    return base_set.insert(position, val);
   }
 
   iterator insert (const_iterator position,  Key && val)
   {
     bloom.insert(val);
-    return base_set::insert(position, val);
+    return base_set.insert(position, val);
   }
 
   template <class InputIterator>
@@ -62,7 +86,7 @@ public:
     for (auto i = first; i != last; ++i)
     {
       bloom.insert(*i);
-      return base_set::insert(*i);
+      return base_set.insert(*i);
     }
   }
 
@@ -71,20 +95,20 @@ public:
     for (auto&& i : il)
     {
       bloom.insert(i);
-      base_set::insert(i);    
+      base_set.insert(i);    
     }
   }
 
   iterator erase (const_iterator position)
   {
     bloom.erase(*position);
-    return base_set::erase(position);
+    return base_set.erase(position);
   }
 
   size_type erase (const Key& val)
   {
     bloom.erase(val);
-    return base_set::erase(val);
+    return base_set.erase(val);
   }
 
   iterator erase (const_iterator first, const_iterator last)
@@ -92,7 +116,7 @@ public:
     for (auto i = first; i != last; ++i)
     {
       bloom.erase(*i);
-      base_set::erase(i);
+      base_set.erase(i);
     }
   }
 
@@ -100,11 +124,11 @@ public:
   {
     if (!bloom.has(val))
     {
-      return base_set::cend();
+      return base_set.cend();
     }
     else
     {
-      return base_set::find(val);
+      return base_set.find(val);
     }
   }
 
@@ -112,11 +136,11 @@ public:
   {
     if (!bloom.has(val))
     {
-      return base_set::end();
+      return base_set.end();
     }
     else
     {
-      return base_set::find(val);
+      return base_set.find(val);
     }
   }
 private:
