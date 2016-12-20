@@ -46,12 +46,13 @@ public:
 
   void erase(const Key& item)
   {
+    if (!has(item))
+    {
+      return;
+    }
     for (const auto& hash_fn : hash_functions)
     {
-      if (table[hash_fn(item) % bucket_count] != 0)
-      {
-        --table[hash_fn(item) % bucket_count];
-      }
+      --table[hash_fn(item) % bucket_count];
     }
   }
 
