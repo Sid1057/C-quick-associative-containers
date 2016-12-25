@@ -48,11 +48,10 @@ public:
   {
     if (!has(item))
     {
-      return;
-    }
-    for (const auto& hash_fn : hash_functions)
-    {
-      --table[hash_fn(item) % bucket_count];
+      for (const auto& hash_fn : hash_functions)
+      {
+        --table[hash_fn(item) % bucket_count];
+      }
     }
   }
 
